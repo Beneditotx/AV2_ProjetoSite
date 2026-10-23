@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}"><link rel="stylesheet" th:href="@{/css/items.css}"><link rel="stylesheet" th:href="@{/css/responsividade.css}">
+    <title>Itens - Subnautica GX</title>
+</head>
+<body>
+<header><nav class="navbar">
+    <div class="logo"><a th:href="@{/}"><span class="destaque_logo">SUB</span>NAUTICA</a></div>
+    <button class="menu_toggle" aria-label="Abrir menu">&#9776;</button>
+    <ul class="nav_links"><li><a th:href="@{/mapa}">MAPA</a></li><li><a href="#">PROJETOS</a></li><li><a class="active_link" th:href="@{/items}">ITENS</a></li><li><a th:href="@{/criaturas}">CRIATURAS</a></li><li><a href="#">BIOMODS</a></li><li><a href="#">AGRICULTURA</a></li><li><a th:href="@{/#noticias}">NOTÍCIAS</a></li></ul>
+</nav></header>
+<main class="items_page">
+    <section class="items_hero">
+        <span class="section_tag">BANCO DE DADOS</span><h1>Itens de <span>Subnautica</span></h1>
+        <p>Consulte recursos, ferramentas, equipamentos, consumíveis e componentes essenciais para sobreviver no Planeta 4546B.</p>
+        <a class="catalog_action" th:href="@{/items/novo}">＋ Cadastrar item</a>
+    </section>
+    <section class="items_panel">
+        <form class="search_box" method="get" th:action="@{/items}">
+            <span class="search_icon">⌕</span><input type="search" name="q" th:value="${busca}" placeholder="Pesquisar item..." autocomplete="off">
+            <input type="hidden" name="categoria" th:value="${categoriaSelecionada}" th:if="${!#strings.isEmpty(categoriaSelecionada)}">
+            <button class="catalog_search" type="submit">Buscar</button>
+        </form>
+        <div class="filters_container">
+            <a class="filter_button" th:classappend="${#strings.isEmpty(categoriaSelecionada)} ? ' active' : ''" th:href="@{/items(q=${busca})}">Todos</a>
+            <a class="filter_button" th:each="categoria : ${categorias}" th:text="${categoria.nome}" th:classappend="${categoriaSelecionada == categoria.codigo} ? ' active' : ''" th:href="@{/items(q=${busca},categoria=${categoria.codigo})}">Categoria</a>
+        </div>
+    </section>
+    <section class="items_results"><p th:text="|${itens.size()} itens encontrados|">0 itens encontrados</p><a id="clear_filters" th:href="@{/items}">Limpar filtros</a></section>
+    <section class="items_grid" id="items_grid">
+        <a class="item_card" th:each="item : ${itens}" th:href="@{/items/{id}(id=${item.id})}">
+            <div class="item_card_top"><div class="item_icon" th:text="${item.icone}">Ti</div><span class="item_category" th:text="${item.categoria.nome}">Recursos</span></div>
+            <div><h2 th:text="${item.nome}">Titânio</h2><p th:text="${item.descricao}">Material básico.</p></div>
+            <span class="item_more">VER DETALHES →</span>
+        </a>
+    </section>
+    <section class="empty_state" th:if="${#lists.isEmpty(itens)}"><span>⌕</span><h2>Nenhum item encontrado</h2><p>Tente outra pesquisa ou cadastre um novo item.</p></section>
+</main>
+<footer><div class="footer_content"><p id="footer_msg">&copy; 2026 Subnautica 2 GX. Desenvolvido por fãs.</p><p class="aviso_legal">Este site não é afiliado à Unknown Worlds Entertainment. Todos os materiais do jogo pertencem aos seus respectivos donos.</p></div></footer>
+<script th:src="@{/js/main.js}"></script>
+</body></html>

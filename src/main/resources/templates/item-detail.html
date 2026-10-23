@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}"><link rel="stylesheet" th:href="@{/css/items.css}"><link rel="stylesheet" th:href="@{/css/responsividade.css}">
+    <title th:text="${item.nome} + ' - Subnautica GX'">Item</title>
+</head>
+<body>
+<header><nav class="navbar"><div class="logo"><a th:href="@{/}"><span class="destaque_logo">SUB</span>NAUTICA</a></div><ul class="nav_links"><li><a th:href="@{/items}">ITENS</a></li><li><a th:href="@{/mapa}">MAPA</a></li></ul></nav></header>
+<main class="items_page">
+    <p class="flash_message" th:if="${mensagem}" th:text="${mensagem}"></p>
+    <section class="items_hero"><span class="section_tag">DETALHES DO CATÁLOGO</span><h1 th:text="${item.nome}">Titânio</h1><p>Informações do item relacionadas à categoria cadastrada no banco de dados.</p></section>
+    <article class="item_detail">
+        <div class="item_card_top"><div class="item_icon detail_icon" th:text="${item.icone}">Ti</div><span class="item_category" th:text="${item.categoria.nome}">Recursos</span></div>
+        <p class="detail_description" th:text="${item.descricao}">Descrição do item.</p>
+        <div class="detail_grid"><section><span>Receita ou obtenção</span><p th:text="${item.receita}">Obtenção</p></section><section><span>Onde encontrar</span><p th:text="${item.localizacao}">Localização</p></section><section><span>Desbloqueio</span><p th:text="${item.desbloqueio}">Desbloqueio</p></section></div>
+        <div class="form_actions"><a class="catalog_action" th:href="@{/items/{id}/editar(id=${item.id})}">Editar item</a><a class="catalog_cancel" th:href="@{/items}">Voltar ao catálogo</a>
+            <form method="post" th:action="@{/items/{id}/excluir(id=${item.id})}" onsubmit="return confirm('Deseja excluir este item?')"><button class="catalog_delete" type="submit">Excluir item</button></form>
+        </div>
+    </article>
+</main><script th:src="@{/js/main.js}"></script></body></html>

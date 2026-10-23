@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}"><link rel="stylesheet" th:href="@{/css/items.css}"><link rel="stylesheet" th:href="@{/css/responsividade.css}">
+    <title th:text="${tituloFormulario} + ' - Subnautica GX'">Item</title>
+</head>
+<body>
+<header><nav class="navbar"><div class="logo"><a th:href="@{/}"><span class="destaque_logo">SUB</span>NAUTICA</a></div><ul class="nav_links"><li><a th:href="@{/items}">ITENS</a></li><li><a th:href="@{/mapa}">MAPA</a></li></ul></nav></header>
+<main class="items_page">
+    <section class="items_hero"><span class="section_tag">BANCO DE DADOS</span><h1 th:text="${tituloFormulario}">Novo item</h1><p>Preencha os dados para manter o catálogo de sobrevivência atualizado.</p></section>
+    <form class="catalog_form" method="post" th:action="${acaoFormulario}" th:object="${itemForm}">
+        <div class="form_errors" th:if="${#fields.hasAnyErrors()}"><p>Revise os campos destacados:</p><ul><li th:each="erro : ${#fields.allErrors()}" th:text="${erro}">Erro</li></ul></div>
+        <label>Nome do item<input type="text" th:field="*{nome}" maxlength="100" required><small class="field_error" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></small></label>
+        <label>Ícone curto<input type="text" th:field="*{icone}" maxlength="12" placeholder="Ti" required><small class="field_error" th:if="${#fields.hasErrors('icone')}" th:errors="*{icone}"></small></label>
+        <label>Categoria<select th:field="*{categoriaId}" required><option value="">Selecione uma categoria</option><option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nome}">Recursos</option></select><small class="field_error" th:if="${#fields.hasErrors('categoriaId')}" th:errors="*{categoriaId}"></small></label>
+        <label class="form_wide">Descrição<textarea th:field="*{descricao}" maxlength="500" rows="3" required></textarea><small class="field_error" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></small></label>
+        <label class="form_wide">Receita ou obtenção<textarea th:field="*{receita}" maxlength="500" rows="2" required></textarea><small class="field_error" th:if="${#fields.hasErrors('receita')}" th:errors="*{receita}"></small></label>
+        <label>Onde encontrar<textarea th:field="*{localizacao}" maxlength="300" rows="2" required></textarea><small class="field_error" th:if="${#fields.hasErrors('localizacao')}" th:errors="*{localizacao}"></small></label>
+        <label>Desbloqueio<textarea th:field="*{desbloqueio}" maxlength="300" rows="2" required></textarea><small class="field_error" th:if="${#fields.hasErrors('desbloqueio')}" th:errors="*{desbloqueio}"></small></label>
+        <div class="form_actions"><button class="catalog_action" type="submit" th:text="${edicao} ? 'Salvar alterações' : 'Cadastrar item'">Salvar</button><a class="catalog_cancel" th:href="${edicao} ? @{/items/{id}(id=${idItem})} : @{/items}">Cancelar</a></div>
+    </form>
+</main><script th:src="@{/js/main.js}"></script></body></html>
