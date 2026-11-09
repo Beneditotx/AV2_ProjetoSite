@@ -1,0 +1,35 @@
+services:
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: subnautica-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: subnautica_db
+      POSTGRES_USER: subnautica_user
+      POSTGRES_PASSWORD: subnautica_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - subnautica_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U subnautica_user -d subnautica_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  subnautica-app:
+    build: .
+    container_name: subnautica-wiki-gx
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=jdbc:postgresql://postgres-db:5432/subnautica_db
+      - DB_USER=subnautica_user
+      - DB_PASSWORD=subnautica_pass
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+volumes:
+  subnautica_pgdata:
